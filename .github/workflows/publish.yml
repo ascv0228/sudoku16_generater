@@ -1,0 +1,171 @@
+name: Build and publish Sudoku 16x16 dataset
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'New immutable release tag (e.g. dataset-v1)'
+        required: true
+        default: 'dataset-v1'
+permissions:
+  contents: read
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        include:
+          - {tier: easy, shard: 0, count: 500}
+          - {tier: easy, shard: 1, count: 500}
+          - {tier: easy, shard: 2, count: 500}
+          - {tier: easy, shard: 3, count: 500}
+          - {tier: easy, shard: 4, count: 500}
+          - {tier: easy, shard: 5, count: 500}
+          - {tier: easy, shard: 6, count: 500}
+          - {tier: easy, shard: 7, count: 500}
+          - {tier: easy, shard: 8, count: 500}
+          - {tier: easy, shard: 9, count: 500}
+          - {tier: easy, shard: 10, count: 500}
+          - {tier: easy, shard: 11, count: 500}
+          - {tier: easy, shard: 12, count: 500}
+          - {tier: easy, shard: 13, count: 500}
+          - {tier: easy, shard: 14, count: 500}
+          - {tier: easy, shard: 15, count: 500}
+          - {tier: easy, shard: 16, count: 500}
+          - {tier: easy, shard: 17, count: 500}
+          - {tier: easy, shard: 18, count: 500}
+          - {tier: easy, shard: 19, count: 500}
+          - {tier: easy, shard: 20, count: 500}
+          - {tier: easy, shard: 21, count: 500}
+          - {tier: easy, shard: 22, count: 500}
+          - {tier: easy, shard: 23, count: 500}
+          - {tier: easy, shard: 24, count: 500}
+          - {tier: easy, shard: 25, count: 500}
+          - {tier: easy, shard: 26, count: 500}
+          - {tier: easy, shard: 27, count: 500}
+          - {tier: easy, shard: 28, count: 500}
+          - {tier: easy, shard: 29, count: 500}
+          - {tier: medium, shard: 0, count: 500}
+          - {tier: medium, shard: 1, count: 500}
+          - {tier: medium, shard: 2, count: 500}
+          - {tier: medium, shard: 3, count: 500}
+          - {tier: medium, shard: 4, count: 500}
+          - {tier: medium, shard: 5, count: 500}
+          - {tier: medium, shard: 6, count: 500}
+          - {tier: medium, shard: 7, count: 500}
+          - {tier: medium, shard: 8, count: 500}
+          - {tier: medium, shard: 9, count: 500}
+          - {tier: medium, shard: 10, count: 500}
+          - {tier: medium, shard: 11, count: 500}
+          - {tier: medium, shard: 12, count: 500}
+          - {tier: medium, shard: 13, count: 500}
+          - {tier: medium, shard: 14, count: 500}
+          - {tier: medium, shard: 15, count: 500}
+          - {tier: medium, shard: 16, count: 500}
+          - {tier: medium, shard: 17, count: 500}
+          - {tier: medium, shard: 18, count: 500}
+          - {tier: medium, shard: 19, count: 500}
+          - {tier: medium, shard: 20, count: 500}
+          - {tier: medium, shard: 21, count: 500}
+          - {tier: medium, shard: 22, count: 500}
+          - {tier: medium, shard: 23, count: 500}
+          - {tier: medium, shard: 24, count: 500}
+          - {tier: medium, shard: 25, count: 500}
+          - {tier: medium, shard: 26, count: 500}
+          - {tier: medium, shard: 27, count: 500}
+          - {tier: medium, shard: 28, count: 500}
+          - {tier: medium, shard: 29, count: 500}
+          - {tier: hard, shard: 0, count: 500}
+          - {tier: hard, shard: 1, count: 500}
+          - {tier: hard, shard: 2, count: 500}
+          - {tier: hard, shard: 3, count: 500}
+          - {tier: hard, shard: 4, count: 500}
+          - {tier: hard, shard: 5, count: 500}
+          - {tier: hard, shard: 6, count: 500}
+          - {tier: hard, shard: 7, count: 500}
+          - {tier: hard, shard: 8, count: 500}
+          - {tier: hard, shard: 9, count: 500}
+          - {tier: hard, shard: 10, count: 500}
+          - {tier: hard, shard: 11, count: 500}
+          - {tier: hard, shard: 12, count: 500}
+          - {tier: hard, shard: 13, count: 500}
+          - {tier: hard, shard: 14, count: 500}
+          - {tier: hard, shard: 15, count: 500}
+          - {tier: hard, shard: 16, count: 500}
+          - {tier: hard, shard: 17, count: 500}
+          - {tier: hard, shard: 18, count: 500}
+          - {tier: hard, shard: 19, count: 500}
+          - {tier: hard, shard: 20, count: 500}
+          - {tier: hard, shard: 21, count: 500}
+          - {tier: hard, shard: 22, count: 500}
+          - {tier: hard, shard: 23, count: 500}
+          - {tier: hard, shard: 24, count: 500}
+          - {tier: hard, shard: 25, count: 500}
+          - {tier: hard, shard: 26, count: 500}
+          - {tier: hard, shard: 27, count: 500}
+          - {tier: hard, shard: 28, count: 500}
+          - {tier: hard, shard: 29, count: 500}
+          - {tier: hard, shard: 30, count: 500}
+          - {tier: hard, shard: 31, count: 500}
+          - {tier: hard, shard: 32, count: 500}
+          - {tier: hard, shard: 33, count: 500}
+          - {tier: hard, shard: 34, count: 500}
+          - {tier: hard, shard: 35, count: 500}
+          - {tier: hard, shard: 36, count: 500}
+          - {tier: hard, shard: 37, count: 500}
+          - {tier: hard, shard: 38, count: 500}
+          - {tier: hard, shard: 39, count: 500}
+          - {tier: hard, shard: 40, count: 500}
+          - {tier: hard, shard: 41, count: 500}
+          - {tier: hard, shard: 42, count: 500}
+          - {tier: hard, shard: 43, count: 500}
+          - {tier: hard, shard: 44, count: 500}
+          - {tier: hard, shard: 45, count: 500}
+          - {tier: hard, shard: 46, count: 500}
+          - {tier: hard, shard: 47, count: 500}
+          - {tier: hard, shard: 48, count: 500}
+          - {tier: hard, shard: 49, count: 500}
+          - {tier: hard, shard: 50, count: 500}
+          - {tier: hard, shard: 51, count: 500}
+          - {tier: hard, shard: 52, count: 500}
+          - {tier: hard, shard: 53, count: 500}
+          - {tier: hard, shard: 54, count: 500}
+          - {tier: hard, shard: 55, count: 500}
+          - {tier: hard, shard: 56, count: 500}
+          - {tier: hard, shard: 57, count: 500}
+          - {tier: hard, shard: 58, count: 500}
+          - {tier: hard, shard: 59, count: 500}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install -r requirements.txt
+      - run: python scripts/generate.py --tier ${{ matrix.tier }} --shard ${{ matrix.shard }} --count ${{ matrix.count }} --out out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shard-${{ matrix.tier }}-${{ matrix.shard }}
+          path: out/*.bin
+          retention-days: 30
+  publish:
+    needs: generate
+    runs-on: ubuntu-latest
+    permissions: {contents: write}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install -r requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: shard-*
+          path: shards
+          merge-multiple: true
+      - run: python scripts/package.py --input shards --out release --version '${{ inputs.tag }}'
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then echo 'Tag exists; refusing overwrite'; exit 1; fi
+          gh release create "$TAG" release/*.bin release/manifest.json --title "$TAG" --notes '16x16 Sudoku offline dataset; clue-count tiers; each puzzle uniqueness checked during generation.'
